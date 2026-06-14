@@ -1,0 +1,1115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="RTL Capital Management | Macro Research Portal">
+<title>RTL Capital — Research Portal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400;1,600&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+/* ─── VARIABLES & RESET ─── */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg-pure:       #ffffff;
+  --bg-panel:      #f8fafc;
+  --bg-dark:       #0f172a;
+  --bg-terminal:   #080f1e;
+  --bg-row:        #0d1526;
+  --text-main:     #0f172a;
+  --text-muted:    #64748b;
+  --text-dim:      #94a3b8;
+  --accent:        #2563eb;
+  --accent-dark:   #1e3a8a;
+  --accent-glow:   rgba(37,99,235,0.15);
+  --green:         #22c55e;
+  --red:           #ef4444;
+  --amber:         #f59e0b;
+  --border-light:  #e2e8f0;
+  --border-dark:   rgba(255,255,255,0.07);
+  --transition:    0.5s cubic-bezier(0.16,1,0.3,1);
+}
+
+body {
+  background: var(--bg-pure);
+  color: var(--text-main);
+  font-family: 'Inter', sans-serif;
+  font-weight: 300;
+  -webkit-font-smoothing: antialiased;
+  line-height: 1.7;
+  overflow-x: hidden;
+}
+
+h1,h2,h3,h4,.serif { font-family: 'Playfair Display', serif; }
+.mono { font-family: 'JetBrains Mono', monospace; font-size: 11px; text-transform: uppercase; letter-spacing: 0.15em; }
+
+/* ─── SCROLL REVEAL ─── */
+.reveal { opacity:0; transform:translateY(24px); transition: opacity var(--transition), transform var(--transition); }
+.reveal.active { opacity:1; transform:translateY(0); }
+.d1 { transition-delay:.1s; } .d2 { transition-delay:.2s; } .d3 { transition-delay:.3s; } .d4 { transition-delay:.4s; }
+
+/* ══════════════════════════════════════════
+   ACCESS GATE — PANTALLA DE ACCESO
+══════════════════════════════════════════ */
+#access-gate {
+  position: fixed; inset: 0; z-index: 9999;
+  background: var(--bg-terminal);
+  display: flex; align-items: center; justify-content: center;
+  transition: opacity 0.8s ease, visibility 0.8s ease;
+}
+#access-gate.hidden { opacity:0; visibility:hidden; pointer-events:none; }
+
+.gate-panel {
+  width: 100%; max-width: 480px; padding: 0 24px;
+  animation: gateIn 0.8s cubic-bezier(0.16,1,0.3,1) both;
+}
+@keyframes gateIn { from { opacity:0; transform:translateY(32px); } to { opacity:1; transform:translateY(0); } }
+
+.gate-logo { margin-bottom: 48px; }
+.gate-logo h1 { font-size: 28px; color: #fff; margin-bottom: 6px; }
+.gate-logo span { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: #475569; letter-spacing: 0.3em; text-transform: uppercase; }
+
+.gate-title { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--accent); letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 12px; }
+.gate-headline { font-size: 32px; color: #fff; margin-bottom: 8px; line-height: 1.2; }
+.gate-sub { font-size: 14px; color: #475569; margin-bottom: 40px; }
+
+.gate-field { margin-bottom: 20px; }
+.gate-field label { display: block; font-family: 'JetBrains Mono', monospace; font-size: 9px; color: #64748b; letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 8px; }
+.gate-field input {
+  width: 100%; padding: 14px 16px;
+  background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1);
+  color: #e2e8f0; font-family: 'Inter', sans-serif; font-size: 14px; outline: none;
+  transition: border-color 0.3s, background 0.3s;
+}
+.gate-field input::placeholder { color: #334155; }
+.gate-field input:focus { border-color: var(--accent); background: rgba(37,99,235,0.05); }
+
+.gate-btn {
+  width: 100%; padding: 16px; margin-top: 8px;
+  background: var(--accent); color: #fff; border: none; cursor: pointer;
+  font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase;
+  transition: background 0.3s, transform 0.2s;
+}
+.gate-btn:hover { background: #1d4ed8; }
+.gate-btn:active { transform: scale(0.99); }
+
+.gate-error {
+  font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--red);
+  letter-spacing: 0.1em; margin-top: 12px; display: none;
+}
+.gate-error.show { display: block; }
+
+.gate-disclaimer { margin-top: 32px; padding-top: 24px; border-top: 1px solid rgba(255,255,255,0.06); font-size: 11px; color: #334155; line-height: 1.6; }
+
+/* Ticker en el gate */
+.gate-ticker {
+  position: fixed; bottom: 0; left: 0; right: 0;
+  background: rgba(255,255,255,0.03); border-top: 1px solid rgba(255,255,255,0.06);
+  padding: 10px 0; overflow: hidden;
+}
+.ticker-track { display: flex; gap: 64px; animation: tickerScroll 30s linear infinite; white-space: nowrap; }
+.ticker-item { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #475569; display: flex; gap: 10px; }
+.ticker-item .sym { color: #64748b; }
+.ticker-item .up { color: var(--green); }
+.ticker-item .dn { color: var(--red); }
+@keyframes tickerScroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+/* ══════════════════════════════════════════
+   NAVEGACIÓN
+══════════════════════════════════════════ */
+nav {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 24px 64px; background: rgba(255,255,255,0.97);
+  backdrop-filter: blur(8px); border-bottom: 1px solid var(--border-light);
+  position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+  transition: padding var(--transition);
+}
+nav.scrolled { padding: 16px 64px; }
+
+.logo-container { display: flex; flex-direction: column; text-decoration: none; }
+.logo-container h1 { font-size: 22px; font-weight: 600; color: var(--text-main); line-height: 1; margin-bottom: 3px; }
+.logo-container span { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: var(--text-muted); letter-spacing: 0.25em; text-transform: uppercase; }
+
+.nav-links { display: flex; gap: 40px; list-style: none; }
+.nav-links a {
+  color: var(--text-muted); text-decoration: none; font-weight: 500; font-size: 12px;
+  font-family: 'JetBrains Mono', monospace; letter-spacing: 0.1em; text-transform: uppercase;
+  position: relative; transition: color 0.3s;
+}
+.nav-links a::after {
+  content:''; position:absolute; bottom:-4px; left:0; width:100%; height:1px;
+  background: var(--accent); transform:scaleX(0); transform-origin:right; transition:transform 0.4s ease;
+}
+.nav-links a:hover { color: var(--text-main); }
+.nav-links a:hover::after { transform:scaleX(1); transform-origin:left; }
+.nav-links a.active { color: var(--accent); }
+.nav-links a.active::after { transform:scaleX(1); }
+
+.nav-badge {
+  font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.1em;
+  background: var(--accent); color: #fff; padding: 4px 10px; text-transform: uppercase;
+}
+
+/* ══════════════════════════════════════════
+   TERMINAL HEADER — BARRA BLOOMBERG STYLE
+══════════════════════════════════════════ */
+.terminal-bar {
+  background: var(--bg-terminal); color: #94a3b8;
+  padding: 10px 64px; margin-top: 73px; /* altura del nav */
+  display: flex; justify-content: space-between; align-items: center;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  overflow: hidden;
+}
+.tb-left { display: flex; gap: 32px; align-items: center; }
+.tb-item { font-family: 'JetBrains Mono', monospace; font-size: 10px; display: flex; flex-direction: column; gap: 2px; }
+.tb-item .lbl { color: #334155; font-size: 9px; }
+.tb-item .val { color: #94a3b8; }
+.tb-item .val.up { color: var(--green); }
+.tb-item .val.dn { color: var(--red); }
+.tb-item .val.neu { color: var(--amber); }
+.tb-right { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: #334155; display: flex; gap: 24px; }
+.tb-right span { display: flex; align-items: center; gap: 6px; }
+.tb-right .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); animation: pulse 2s infinite; }
+@keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:0.4;} }
+
+/* ══════════════════════════════════════════
+   HERO RESEARCH
+══════════════════════════════════════════ */
+.research-hero {
+  background: var(--bg-dark); padding: 80px 64px 60px;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  position: relative; overflow: hidden;
+}
+.research-hero::before {
+  content:''; position:absolute; top:0; right:0; width:60%; height:100%;
+  background-image: radial-gradient(rgba(37,99,235,0.08) 1px, transparent 1px);
+  background-size: 28px 28px;
+  mask-image: linear-gradient(to left, rgba(0,0,0,0.8), rgba(0,0,0,0));
+  -webkit-mask-image: linear-gradient(to left, rgba(0,0,0,0.8), rgba(0,0,0,0));
+}
+.rh-inner { max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+.rh-left .tag { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--accent); letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+.rh-left .tag::before { content:''; width:24px; height:1px; background:var(--accent); }
+.rh-left h2 { font-size: clamp(36px,4vw,56px); color: #fff; line-height: 1.1; margin-bottom: 20px; }
+.rh-left p { font-size: 16px; color: #64748b; max-width: 480px; }
+
+/* Stats rápidos */
+.rh-stats { display: grid; grid-template-columns: repeat(3,1fr); gap: 1px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.06); }
+.rh-stat { background: var(--bg-dark); padding: 28px 24px; }
+.rh-stat .s-num { font-family: 'JetBrains Mono', monospace; font-size: 28px; color: #fff; margin-bottom: 6px; }
+.rh-stat .s-num span { font-size: 14px; color: var(--accent); }
+.rh-stat .s-lbl { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: #475569; letter-spacing: 0.15em; text-transform: uppercase; }
+
+/* ══════════════════════════════════════════
+   FILTROS / TABS
+══════════════════════════════════════════ */
+.filter-bar {
+  background: var(--bg-panel); border-bottom: 1px solid var(--border-light);
+  padding: 0 64px; position: sticky; top: 73px; z-index: 900;
+}
+.filter-inner { max-width: 1400px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+.filter-tabs { display: flex; gap: 0; }
+.filter-tab {
+  font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase;
+  padding: 18px 24px; color: var(--text-muted); cursor: pointer; border: none; background: none;
+  border-bottom: 2px solid transparent; transition: all 0.3s; white-space: nowrap;
+}
+.filter-tab:hover { color: var(--text-main); }
+.filter-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+.filter-count { font-size: 9px; background: var(--accent); color: #fff; padding: 2px 6px; margin-left: 6px; border-radius: 2px; }
+.filter-right { display: flex; gap: 16px; align-items: center; }
+.search-box {
+  display: flex; align-items: center; gap: 8px;
+  border: 1px solid var(--border-light); padding: 8px 14px; background: var(--bg-pure);
+}
+.search-box input { border: none; outline: none; font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--text-main); background: none; width: 180px; }
+.search-box input::placeholder { color: var(--text-muted); }
+.search-box svg { color: var(--text-muted); flex-shrink: 0; }
+
+/* ══════════════════════════════════════════
+   MAIN LAYOUT — TERMINAL GRID
+══════════════════════════════════════════ */
+.portal-body { max-width: 1400px; margin: 0 auto; padding: 48px 64px 120px; display: grid; grid-template-columns: 1fr 340px; gap: 48px; }
+
+/* ─── FEATURED REPORT (GRANDE) ─── */
+.featured-report {
+  background: var(--bg-dark); border: 1px solid rgba(255,255,255,0.07);
+  display: grid; grid-template-columns: 1fr 1fr; min-height: 420px;
+  margin-bottom: 48px; transition: all var(--transition); cursor: pointer; text-decoration: none;
+  position: relative; overflow: hidden;
+}
+.featured-report:hover { border-color: var(--accent); }
+.featured-report:hover .fr-arrow { transform: translateX(6px); }
+
+/* Espacio para imagen del featured */
+.fr-image {
+  background: #0d1a2e;
+  display: flex; align-items: center; justify-content: center;
+  position: relative; overflow: hidden; min-height: 300px;
+}
+.fr-image-placeholder {
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px;
+  color: #1e3a5f; text-align: center; padding: 32px;
+}
+.fr-image-placeholder svg { opacity: 0.3; }
+.fr-image-placeholder span { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: #1e3a5f; letter-spacing: 0.2em; text-transform: uppercase; }
+/* ↑ CUANDO TENGAS IMAGEN: reemplaza .fr-image con background-image: url('tu-imagen.jpg'); background-size: cover; */
+
+.fr-content { padding: 40px; display: flex; flex-direction: column; justify-content: space-between; }
+.fr-tag { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: var(--accent); letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 20px; display: flex; align-items: center; gap: 8px; }
+.fr-tag::before { content:'FEATURED'; background: var(--accent); color: #fff; padding: 3px 8px; font-size: 8px; }
+.fr-title { font-size: 28px; color: #fff; line-height: 1.25; margin-bottom: 16px; }
+.fr-excerpt { font-size: 14px; color: #64748b; line-height: 1.7; margin-bottom: 32px; flex-grow: 1; }
+.fr-meta { display: flex; justify-content: space-between; align-items: flex-end; border-top: 1px solid rgba(255,255,255,0.07); padding-top: 20px; }
+.fr-date { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: #475569; }
+.fr-arrow { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--accent); display: flex; align-items: center; gap: 6px; transition: transform 0.3s; }
+
+/* ─── REPORT LIST (TABLA BLOOMBERG) ─── */
+.report-table { width: 100%; border-collapse: collapse; }
+.rt-head { background: var(--bg-dark); }
+.rt-head th {
+  font-family: 'JetBrains Mono', monospace; font-size: 9px; color: #475569;
+  letter-spacing: 0.15em; text-transform: uppercase; padding: 12px 16px;
+  text-align: left; border-bottom: 1px solid rgba(255,255,255,0.06); white-space: nowrap;
+}
+.rt-head th:first-child { padding-left: 20px; }
+
+.rt-row {
+  border-bottom: 1px solid var(--border-light); cursor: pointer;
+  transition: background 0.2s; text-decoration: none; display: table-row;
+}
+.rt-row:hover { background: rgba(37,99,235,0.03); }
+.rt-row td { padding: 18px 16px; vertical-align: middle; }
+.rt-row td:first-child { padding-left: 20px; }
+
+.rt-cat {
+  font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.1em;
+  padding: 4px 8px; text-transform: uppercase; white-space: nowrap;
+}
+.cat-fx { background: rgba(37,99,235,0.08); color: var(--accent); border: 1px solid rgba(37,99,235,0.2); }
+.cat-rates { background: rgba(245,158,11,0.08); color: var(--amber); border: 1px solid rgba(245,158,11,0.2); }
+.cat-comm { background: rgba(34,197,94,0.08); color: var(--green); border: 1px solid rgba(34,197,94,0.2); }
+.cat-macro { background: rgba(148,163,184,0.08); color: #94a3b8; border: 1px solid rgba(148,163,184,0.2); }
+.cat-equity { background: rgba(239,68,68,0.08); color: var(--red); border: 1px solid rgba(239,68,68,0.2); }
+
+.rt-title { font-size: 15px; font-weight: 500; color: var(--text-main); margin-bottom: 4px; line-height: 1.3; }
+.rt-sub { font-size: 12px; color: var(--text-muted); }
+.rt-date { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--text-muted); white-space: nowrap; }
+.rt-pages { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--text-muted); text-align: center; }
+.rt-status { display: flex; align-items: center; gap: 6px; font-family: 'JetBrains Mono', monospace; font-size: 9px; }
+.status-new { color: var(--green); }
+.status-dot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; }
+.rt-action { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--accent); display: flex; align-items: center; gap: 4px; white-space: nowrap; }
+.rt-row:hover .rt-action { text-decoration: underline; }
+
+/* Paginación */
+.pagination { display: flex; gap: 4px; margin-top: 32px; align-items: center; }
+.pg-btn {
+  font-family: 'JetBrains Mono', monospace; font-size: 10px; padding: 8px 14px;
+  border: 1px solid var(--border-light); background: none; cursor: pointer; color: var(--text-muted); transition: all 0.2s;
+}
+.pg-btn:hover { border-color: var(--accent); color: var(--accent); }
+.pg-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+.pg-dots { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--text-muted); padding: 0 8px; }
+
+/* ══════════════════════════════════════════
+   SIDEBAR DERECHO
+══════════════════════════════════════════ */
+.sidebar { display: flex; flex-direction: column; gap: 32px; }
+
+/* Widget: Macro Pulse */
+.widget {
+  border: 1px solid var(--border-light); background: var(--bg-pure);
+}
+.widget-header {
+  padding: 16px 20px; border-bottom: 1px solid var(--border-light);
+  display: flex; justify-content: space-between; align-items: center;
+  background: var(--bg-panel);
+}
+.widget-header h4 { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--text-main); letter-spacing: 0.15em; text-transform: uppercase; }
+.widget-header span { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: var(--text-muted); }
+.widget-body { padding: 20px; }
+
+/* Macro Pulse items */
+.pulse-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--border-light); }
+.pulse-item:last-child { border-bottom: none; }
+.pulse-label { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--text-muted); }
+.pulse-val { font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 500; }
+.pulse-bar { height: 2px; background: var(--border-light); margin-top: 4px; border-radius: 1px; overflow: hidden; }
+.pulse-fill { height: 100%; border-radius: 1px; transition: width 1s ease; }
+
+/* Widget: Próximo Reporte */
+.next-report { background: var(--bg-dark); border: 1px solid rgba(255,255,255,0.07); padding: 28px; }
+.nr-label { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: var(--accent); letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 16px; }
+.nr-title { font-size: 20px; color: #fff; margin-bottom: 12px; line-height: 1.3; }
+.nr-date { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #475569; margin-bottom: 24px; }
+.countdown { display: grid; grid-template-columns: repeat(4,1fr); gap: 8px; }
+.cd-unit { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.07); padding: 12px 8px; text-align: center; }
+.cd-num { font-family: 'JetBrains Mono', monospace; font-size: 22px; color: #fff; display: block; }
+.cd-lbl { font-family: 'JetBrains Mono', monospace; font-size: 8px; color: #334155; letter-spacing: 0.1em; text-transform: uppercase; }
+
+/* Widget: Categorías */
+.cat-list { display: flex; flex-direction: column; gap: 0; }
+.cat-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 12px 0; border-bottom: 1px solid var(--border-light); cursor: pointer; transition: all 0.2s;
+}
+.cat-row:last-child { border-bottom: none; }
+.cat-row:hover .cat-row-name { color: var(--accent); }
+.cat-row-name { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--text-muted); letter-spacing: 0.1em; text-transform: uppercase; transition: color 0.2s; }
+.cat-row-count { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--text-muted); background: var(--bg-panel); padding: 2px 8px; border: 1px solid var(--border-light); }
+
+/* Widget: Disclaimer */
+.disclaimer-widget { background: rgba(245,158,11,0.04); border: 1px solid rgba(245,158,11,0.15); padding: 20px; }
+.dw-icon { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: var(--amber); letter-spacing: 0.15em; margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
+.dw-text { font-size: 11px; color: var(--text-muted); line-height: 1.6; }
+
+/* ══════════════════════════════════════════
+   TICKER INFERIOR (LIVE DATA PLACEHOLDER)
+══════════════════════════════════════════ */
+.live-ticker {
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 800;
+  background: var(--bg-dark); border-top: 1px solid rgba(255,255,255,0.07);
+  padding: 8px 0; overflow: hidden;
+}
+.lt-track { display: flex; gap: 48px; animation: tickerScroll 40s linear infinite; white-space: nowrap; }
+.lt-item { font-family: 'JetBrains Mono', monospace; font-size: 10px; display: flex; gap: 10px; align-items: center; }
+.lt-sym { color: #94a3b8; }
+.lt-val { color: #64748b; }
+.lt-chg.up { color: var(--green); }
+.lt-chg.dn { color: var(--red); }
+.lt-sep { color: #1e293b; }
+
+/* ══════════════════════════════════════════
+   FOOTER
+══════════════════════════════════════════ */
+footer {
+  background: var(--text-main); color: #94a3b8;
+  padding: 60px 64px 40px; margin-bottom: 36px; /* espacio para ticker */
+}
+.footer-inner { max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 64px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 48px; margin-bottom: 24px; }
+.f-brand h2 { font-size: 24px; color: #fff; margin-bottom: 12px; }
+.f-brand p { font-size: 13px; max-width: 360px; line-height: 1.8; }
+.f-links h4 { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: #fff; letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 20px; }
+.f-links ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+.f-links a { color: #94a3b8; text-decoration: none; font-size: 13px; transition: color 0.3s; }
+.f-links a:hover { color: #fff; }
+.footer-bottom { max-width: 1400px; margin: 0 auto; display: flex; justify-content: space-between; font-size: 10px; font-family: 'JetBrains Mono', monospace; }
+
+/* ══════════════════════════════════════════
+   RESPONSIVE
+══════════════════════════════════════════ */
+@media (max-width: 1200px) {
+  .portal-body { grid-template-columns: 1fr; }
+  .sidebar { display: grid; grid-template-columns: repeat(2,1fr); }
+  .rh-inner { grid-template-columns: 1fr; gap: 40px; }
+}
+@media (max-width: 1024px) {
+  .featured-report { grid-template-columns: 1fr; }
+  .fr-image { min-height: 200px; }
+  .footer-inner { grid-template-columns: 1fr; gap: 40px; }
+}
+@media (max-width: 768px) {
+  nav { padding: 16px 24px; flex-direction: column; gap: 12px; }
+  .nav-links { gap: 16px; flex-wrap: wrap; justify-content: center; }
+  .terminal-bar { padding: 10px 24px; flex-direction: column; gap: 12px; }
+  .tb-left { flex-wrap: wrap; gap: 16px; }
+  .research-hero, .portal-body, footer { padding-left: 24px; padding-right: 24px; }
+  .filter-bar { padding: 0 24px; }
+  .filter-tabs { overflow-x: auto; }
+  .sidebar { grid-template-columns: 1fr; }
+  .rh-stats { grid-template-columns: 1fr; }
+  .footer-bottom { flex-direction: column; gap: 12px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════
+     ACCESS GATE
+══════════════════════════════════════════ -->
+<div id="access-gate">
+  <div class="gate-panel">
+    <div class="gate-logo">
+      <h1 class="serif">RTL Capital</h1>
+      <span>Management & Research</span>
+    </div>
+    <div class="gate-title">Research Portal — Acceso Restringido</div>
+    <h2 class="gate-headline serif">Institutional<br>Access Only</h2>
+    <p class="gate-sub">Este portal es exclusivo para contrapartes aprobadas. Ingrese sus credenciales de acceso.</p>
+
+    <!-- 
+      ─── BACKEND TODO ───────────────────────────────────────────────
+      Conectar este form a tu API de autenticación.
+      Opciones sugeridas:
+        - Supabase Auth (fácil, gratis tier)
+        - Firebase Auth
+        - Auth0
+        - Tu propio endpoint POST /api/auth/login
+      
+      Por ahora: validación local con código de acceso hardcodeado.
+      Reemplazar la función handleGateSubmit() con tu lógica real.
+      ────────────────────────────────────────────────────────────────
+    -->
+    <form id="gate-form" onsubmit="handleGateSubmit(event)">
+      <div class="gate-field">
+        <label>Nombre Completo</label>
+        <input type="text" id="gate-name" required placeholder="Ej. Carlos Mendoza">
+      </div>
+      <div class="gate-field">
+        <label>Correo Institucional</label>
+        <input type="email" id="gate-email" required placeholder="nombre@su-fondo.com">
+      </div>
+      <div class="gate-field">
+        <label>Código de Acceso</label>
+        <input type="password" id="gate-code" required placeholder="••••••••">
+      </div>
+      <button type="submit" class="gate-btn">Verificar Credenciales →</button>
+      <div class="gate-error" id="gate-error">// ERROR: Credenciales no reconocidas. Contacte research@rtlcapital.com</div>
+    </form>
+
+    <p class="gate-disclaimer">
+      El acceso a este portal implica la aceptación de los términos de confidencialidad institucional de RTL Capital Management. El contenido es exclusivo para entidades profesionales acreditadas y no constituye asesoramiento de inversión.
+    </p>
+  </div>
+
+  <!-- Ticker decorativo en el gate -->
+  <div class="gate-ticker">
+    <div class="ticker-track" id="gate-ticker-track">
+      <!-- Generado por JS -->
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     NAVEGACIÓN
+══════════════════════════════════════════ -->
+<nav id="navbar">
+  <a href="index.html" class="logo-container">
+    <h1 class="serif">RTL Capital</h1>
+    <span>Management & Research</span>
+  </div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html#philosophy">Firm Overview</a></li>
+    <li><a href="index.html#infrastructure">Infrastructure</a></li>
+    <li><a href="#" class="active">Research Portal</a></li>
+    <li><a href="index.html#contact">Inquiries</a></li>
+  </ul>
+  <div class="nav-badge mono">LIVE</div>
+</nav>
+
+<!-- ══════════════════════════════════════════
+     TERMINAL BAR — MACRO INDICATORS
+══════════════════════════════════════════ -->
+<div class="terminal-bar">
+  <div class="tb-left">
+    <!-- 
+      ─── BACKEND TODO ───────────────────────────────────────────────
+      Estos valores deben actualizarse vía API (ej. FRED, Alpha Vantage, Twelve Data).
+      Reemplazar los valores estáticos con fetch() a tu endpoint de datos macro.
+      ────────────────────────────────────────────────────────────────
+    -->
+    <div class="tb-item">
+      <span class="lbl">EUR/USD</span>
+      <span class="val up">1.0842 ▲</span>
+    </div>
+    <div class="tb-item">
+      <span class="lbl">DXY</span>
+      <span class="val dn">104.32 ▼</span>
+    </div>
+    <div class="tb-item">
+      <span class="lbl">US10Y</span>
+      <span class="val neu">4.38%</span>
+    </div>
+    <div class="tb-item">
+      <span class="lbl">GOLD</span>
+      <span class="val up">2,341 ▲</span>
+    </div>
+    <div class="tb-item">
+      <span class="lbl">VIX</span>
+      <span class="val dn">14.2 ▼</span>
+    </div>
+    <div class="tb-item">
+      <span class="lbl">FED FUNDS</span>
+      <span class="val neu">5.25–5.50%</span>
+    </div>
+    <div class="tb-item">
+      <span class="lbl">WTI</span>
+      <span class="val up">78.40 ▲</span>
+    </div>
+  </div>
+  <div class="tb-right">
+    <span><span class="dot"></span> LIVE DATA</span>
+    <span id="terminal-clock">--:--:-- CST</span>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     HERO RESEARCH
+══════════════════════════════════════════ -->
+<section class="research-hero">
+  <div class="rh-inner">
+    <div class="rh-left reveal">
+      <div class="tag">Macro Research Portal</div>
+      <h2 class="serif">Perspectivas<br>Estructurales</h2>
+      <p>Análisis semanal de mercados globales. FX, Rates, Commodities y Macro Estratégico. Distribución exclusiva para contrapartes aprobadas.</p>
+    </div>
+    <div class="rh-stats reveal d1">
+      <div class="rh-stat">
+        <!-- BACKEND TODO: Número real de reportes publicados -->
+        <div class="s-num">47<span>+</span></div>
+        <div class="s-lbl">Reportes Publicados</div>
+      </div>
+      <div class="rh-stat">
+        <div class="s-num">4<span>×</span></div>
+        <div class="s-lbl">Cobertura Mensual</div>
+      </div>
+      <div class="rh-stat">
+        <!-- BACKEND TODO: Número real de suscriptores aprobados -->
+        <div class="s-num">—</div>
+        <div class="s-lbl">Contrapartes Activas</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     FILTER BAR
+══════════════════════════════════════════ -->
+<div class="filter-bar">
+  <div class="filter-inner">
+    <div class="filter-tabs">
+      <button class="filter-tab active" onclick="filterReports('all', this)">
+        All <span class="filter-count">12</span>
+      </button>
+      <button class="filter-tab" onclick="filterReports('fx', this)">
+        Global Macro FX <span class="filter-count">4</span>
+      </button>
+      <button class="filter-tab" onclick="filterReports('rates', this)">
+        Rates & Yield <span class="filter-count">3</span>
+      </button>
+      <button class="filter-tab" onclick="filterReports('commodities', this)">
+        Commodities <span class="filter-count">3</span>
+      </button>
+      <button class="filter-tab" onclick="filterReports('macro', this)">
+        Macro Estratégico <span class="filter-count">2</span>
+      </button>
+    </div>
+    <div class="filter-right">
+      <div class="search-box">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        <input type="text" placeholder="BUSCAR REPORTE..." oninput="searchReports(this.value)">
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     PORTAL BODY
+══════════════════════════════════════════ -->
+<div class="portal-body">
+
+  <!-- ─── COLUMNA PRINCIPAL ─── -->
+  <div class="main-col">
+
+    <!-- FEATURED REPORT -->
+    <a href="#" class="featured-report reveal" id="featured-report">
+      <!-- 
+        ─── IMAGEN FEATURED ────────────────────────────────────────────
+        Reemplaza .fr-image con:
+        <div class="fr-image" style="background-image:url('ruta/a/tu-imagen.jpg'); background-size:cover; background-position:center;">
+        </div>
+        Tamaño recomendado: 800×500px, formato WebP
+        ────────────────────────────────────────────────────────────────
+      -->
+      <div class="fr-image">
+        <div class="fr-image-placeholder">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          <span>Cover Image<br>800 × 500 px</span>
+        </div>
+      </div>
+      <div class="fr-content">
+        <div>
+          <div class="fr-tag">GLOBAL MACRO FX</div>
+          <!-- BACKEND TODO: Título del reporte más reciente -->
+          <h3 class="fr-title serif">EUR/USD: Ineficiencias en el Diferencial de Tasas Reales y el Nuevo Régimen del BCE</h3>
+          <p class="fr-excerpt">Análisis del reciente repricing en las expectativas del BCE y su impacto asimétrico en la valoración estructural del euro frente al dólar. Identificamos tres niveles técnicos clave y la estructura de convexidad óptima para el Q3 2026.</p>
+        </div>
+        <div class="fr-meta">
+          <div>
+            <div class="fr-date">May 21, 2026 · 18 páginas</div>
+          </div>
+          <div class="fr-arrow mono">LEER INFORME COMPLETO →</div>
+        </div>
+      </div>
+    </a>
+
+    <!-- TABLA DE REPORTES -->
+    <div class="reveal d1">
+      <table class="report-table" id="report-table">
+        <thead class="rt-head">
+          <tr>
+            <th>Categoría</th>
+            <th>Título del Reporte</th>
+            <th>Fecha</th>
+            <th style="text-align:center">Págs.</th>
+            <th>Status</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="report-tbody">
+          <!-- 
+            ─── BACKEND TODO ───────────────────────────────────────────────
+            Reemplazar estas filas estáticas con un fetch() a tu API:
+            
+            fetch('/api/reports')
+              .then(r => r.json())
+              .then(data => renderReports(data))
+            
+            Estructura de cada reporte:
+            {
+              id: "rpt-001",
+              category: "fx",          // fx | rates | commodities | macro | equity
+              categoryLabel: "GLOBAL MACRO FX",
+              title: "Título del reporte",
+              subtitle: "Subtítulo o tesis principal",
+              date: "2026-05-21",
+              pages: 18,
+              isNew: true,
+              url: "/reports/rpt-001.pdf"
+            }
+            ────────────────────────────────────────────────────────────────
+          -->
+          <tr class="rt-row" data-cat="fx" onclick="window.location='#'">
+            <td><span class="rt-cat cat-fx">FX</span></td>
+            <td>
+              <div class="rt-title">EUR/USD: Ineficiencias en el Diferencial de Tasas Reales</div>
+              <div class="rt-sub">Repricing BCE · Convexidad Q3 2026</div>
+            </td>
+            <td class="rt-date">May 21, 2026</td>
+            <td class="rt-pages">18</td>
+            <td><div class="rt-status status-new"><span class="status-dot"></span> NEW</div></td>
+            <td><div class="rt-action">ABRIR →</div></td>
+          </tr>
+          <tr class="rt-row" data-cat="rates" onclick="window.location='#'">
+            <td><span class="rt-cat cat-rates">RATES</span></td>
+            <td>
+              <div class="rt-title">El Fin de la Flexibilización: Impacto en la Curva Soberana</div>
+              <div class="rt-sub">QT Continuo · Presión Tramo Largo</div>
+            </td>
+            <td class="rt-date">May 14, 2026</td>
+            <td class="rt-pages">14</td>
+            <td><div class="rt-status" style="color:var(--text-muted)"><span class="status-dot"></span> —</div></td>
+            <td><div class="rt-action">ABRIR →</div></td>
+          </tr>
+          <tr class="rt-row" data-cat="commodities" onclick="window.location='#'">
+            <td><span class="rt-cat cat-comm">COMM</span></td>
+            <td>
+              <div class="rt-title">Desmonetización y el Floor Estructural del Oro</div>
+              <div class="rt-sub">Bancos Centrales Periféricos · Correlación TIPS</div>
+            </td>
+            <td class="rt-date">May 07, 2026</td>
+            <td class="rt-pages">22</td>
+            <td><div class="rt-status" style="color:var(--text-muted)"><span class="status-dot"></span> —</div></td>
+            <td><div class="rt-action">ABRIR →</div></td>
+          </tr>
+          <tr class="rt-row" data-cat="macro" onclick="window.location='#'">
+            <td><span class="rt-cat cat-macro">MACRO</span></td>
+            <td>
+              <div class="rt-title">Reconfiguración Geopolítica y Flujos de Capital EM</div>
+              <div class="rt-sub">Nearshoring · Divergencia Latam vs Asia</div>
+            </td>
+            <td class="rt-date">Apr 30, 2026</td>
+            <td class="rt-pages">16</td>
+            <td><div class="rt-status" style="color:var(--text-muted)"><span class="status-dot"></span> —</div></td>
+            <td><div class="rt-action">ABRIR →</div></td>
+          </tr>
+          <tr class="rt-row" data-cat="fx" onclick="window.location='#'">
+            <td><span class="rt-cat cat-fx">FX</span></td>
+            <td>
+              <div class="rt-title">USD/JPY: El Umbral de Intervención del BoJ</div>
+              <div class="rt-sub">Carry Trade · Riesgo de Reversión Violenta</div>
+            </td>
+            <td class="rt-date">Apr 23, 2026</td>
+            <td class="rt-pages">12</td>
+            <td><div class="rt-status" style="color:var(--text-muted)"><span class="status-dot"></span> —</div></td>
+            <td><div class="rt-action">ABRIR →</div></td>
+          </tr>
+          <tr class="rt-row" data-cat="rates" onclick="window.location='#'">
+            <td><span class="rt-cat cat-rates">RATES</span></td>
+            <td>
+              <div class="rt-title">Deuda Soberana EM: Spreads y el Ciclo Fed</div>
+              <div class="rt-sub">Diferencial EM-DM · Ventana de Oportunidad</div>
+            </td>
+            <td class="rt-date">Apr 16, 2026</td>
+            <td class="rt-pages">19</td>
+            <td><div class="rt-status" style="color:var(--text-muted)"><span class="status-dot"></span> —</div></td>
+            <td><div class="rt-action">ABRIR →</div></td>
+          </tr>
+          <tr class="rt-row" data-cat="commodities" onclick="window.location='#'">
+            <td><span class="rt-cat cat-comm">COMM</span></td>
+            <td>
+              <div class="rt-title">Petróleo: OPEC+ Discipline vs. Shale Supply Response</div>
+              <div class="rt-sub">WTI Structural Range · Backwardation Analysis</div>
+            </td>
+            <td class="rt-date">Apr 09, 2026</td>
+            <td class="rt-pages">15</td>
+            <td><div class="rt-status" style="color:var(--text-muted)"><span class="status-dot"></span> —</div></td>
+            <td><div class="rt-action">ABRIR →</div></td>
+          </tr>
+          <tr class="rt-row" data-cat="macro" onclick="window.location='#'">
+            <td><span class="rt-cat cat-macro">MACRO</span></td>
+            <td>
+              <div class="rt-title">Ciclo Electoral Global 2026: Implicaciones para Renta Fija</div>
+              <div class="rt-sub">Riesgo Político · Volatilidad Implícita Soberana</div>
+            </td>
+            <td class="rt-date">Apr 02, 2026</td>
+            <td class="rt-pages">20</td>
+            <td><div class="rt-status" style="color:var(--text-muted)"><span class="status-dot"></span> —</div></td>
+            <td><div class="rt-action">ABRIR →</div></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Paginación -->
+      <div class="pagination">
+        <button class="pg-btn active">01</button>
+        <button class="pg-btn">02</button>
+        <button class="pg-btn">03</button>
+        <span class="pg-dots">···</span>
+        <button class="pg-btn">06</button>
+        <button class="pg-btn" style="padding:8px 16px;">NEXT →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SIDEBAR ─── -->
+  <aside class="sidebar">
+
+    <!-- Widget: Próximo Reporte -->
+    <div class="next-report reveal d1">
+      <div class="nr-label">// Próxima Publicación</div>
+      <!-- BACKEND TODO: Título del próximo reporte -->
+      <h4 class="nr-title serif">GBP/USD Post-BoE: Structural Repricing</h4>
+      <div class="nr-date">Domingo, Jun 22, 2026 · 20:00 CST</div>
+      <div class="countdown">
+        <div class="cd-unit"><span class="cd-num" id="cd-days">--</span><span class="cd-lbl">Days</span></div>
+        <div class="cd-unit"><span class="cd-num" id="cd-hours">--</span><span class="cd-lbl">Hrs</span></div>
+        <div class="cd-unit"><span class="cd-num" id="cd-mins">--</span><span class="cd-lbl">Min</span></div>
+        <div class="cd-unit"><span class="cd-num" id="cd-secs">--</span><span class="cd-lbl">Sec</span></div>
+      </div>
+    </div>
+
+    <!-- Widget: Macro Pulse -->
+    <div class="widget reveal d2">
+      <div class="widget-header">
+        <h4>Macro Pulse</h4>
+        <span>// Indicadores Clave</span>
+      </div>
+      <div class="widget-body">
+        <!-- BACKEND TODO: Conectar a API de datos macro (FRED, BLS, etc.) -->
+        <div class="pulse-item">
+          <div>
+            <div class="pulse-label">US CPI YoY</div>
+            <div class="pulse-bar"><div class="pulse-fill" style="width:62%; background:var(--amber);"></div></div>
+          </div>
+          <div class="pulse-val" style="color:var(--amber)">3.4%</div>
+        </div>
+        <div class="pulse-item">
+          <div>
+            <div class="pulse-label">EUR CPI YoY</div>
+            <div class="pulse-bar"><div class="pulse-fill" style="width:48%; background:var(--green);"></div></div>
+          </div>
+          <div class="pulse-val" style="color:var(--green)">2.4%</div>
+        </div>
+        <div class="pulse-item">
+          <div>
+            <div class="pulse-label">US Unemployment</div>
+            <div class="pulse-bar"><div class="pulse-fill" style="width:38%; background:var(--green);"></div></div>
+          </div>
+          <div class="pulse-val" style="color:var(--green)">3.9%</div>
+        </div>
+        <div class="pulse-item">
+          <div>
+            <div class="pulse-label">Global PMI Mfg.</div>
+            <div class="pulse-bar"><div class="pulse-fill" style="width:52%; background:var(--amber);"></div></div>
+          </div>
+          <div class="pulse-val" style="color:var(--amber)">50.3</div>
+        </div>
+        <div class="pulse-item">
+          <div>
+            <div class="pulse-label">US Yield Curve (2s10s)</div>
+            <div class="pulse-bar"><div class="pulse-fill" style="width:25%; background:var(--red);"></div></div>
+          </div>
+          <div class="pulse-val" style="color:var(--red)">-0.42</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Widget: Categorías -->
+    <div class="widget reveal d3">
+      <div class="widget-header">
+        <h4>Cobertura</h4>
+        <span>// Por Categoría</span>
+      </div>
+      <div class="widget-body">
+        <div class="cat-list">
+          <div class="cat-row" onclick="filterReports('fx', null)">
+            <span class="cat-row-name">Global Macro FX</span>
+            <span class="cat-row-count">04</span>
+          </div>
+          <div class="cat-row" onclick="filterReports('rates', null)">
+            <span class="cat-row-name">Rates & Yield</span>
+            <span class="cat-row-count">03</span>
+          </div>
+          <div class="cat-row" onclick="filterReports('commodities', null)">
+            <span class="cat-row-name">Commodities</span>
+            <span class="cat-row-count">03</span>
+          </div>
+          <div class="cat-row" onclick="filterReports('macro', null)">
+            <span class="cat-row-name">Macro Estratégico</span>
+            <span class="cat-row-count">02</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Widget: Disclaimer -->
+    <div class="disclaimer-widget reveal d4">
+      <div class="dw-icon">⚠ AVISO REGULATORIO</div>
+      <p class="dw-text">El contenido de este portal es estrictamente informativo y no constituye oferta de venta ni asesoramiento de inversión. Exclusivo para entidades profesionales acreditadas. RTL Capital Management no es una entidad regulada por la CNBV.</p>
+    </div>
+
+  </aside>
+</div>
+
+<!-- ══════════════════════════════════════════
+     FOOTER
+══════════════════════════════════════════ -->
+<footer>
+  <div class="footer-inner">
+    <div class="f-brand">
+      <h2 class="serif">RTL Capital</h2>
+      <p>Inteligencia sistémica para mercados complejos. Aislando la señal macroeconómica para la protección estructural del capital.</p>
+    </div>
+    <div class="f-links">
+      <h4>Portal</h4>
+      <ul>
+        <li><a href="#">Todos los Reportes</a></li>
+        <li><a href="#">Global Macro FX</a></li>
+        <li><a href="#">Rates & Yield</a></li>
+        <li><a href="#">Commodities</a></li>
+      </ul>
+    </div>
+    <div class="f-links">
+      <h4>Compliance</h4>
+      <ul>
+        <li><a href="#">Términos Institucionales</a></li>
+        <li><a href="#">Privacidad y Datos</a></li>
+        <li><a href="#">Avisos Regulatorios</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div>© 2026 RTL CAPITAL MANAGEMENT. RESERVADOS TODOS LOS DERECHOS.</div>
+    <div style="color:#475569; text-align:right; max-width:400px; line-height:1.5; font-family:'Inter',sans-serif; font-size:10px;">
+      Material estrictamente informativo. No constituye oferta de venta ni asesoramiento de inversión.
+    </div>
+  </div>
+</footer>
+
+<!-- ══════════════════════════════════════════
+     LIVE TICKER (INFERIOR)
+══════════════════════════════════════════ -->
+<div class="live-ticker">
+  <div class="lt-track" id="live-ticker-track">
+    <!-- Generado por JS -->
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     JAVASCRIPT
+══════════════════════════════════════════ -->
+<script>
+/* ─── DATOS DEL TICKER (PLACEHOLDER ESTÁTICO)
+   BACKEND TODO: Reemplazar con fetch() a tu API de precios en tiempo real
+   Opciones: Twelve Data (free tier), Alpha Vantage, Polygon.io
+   ─────────────────────────────────────────── */
+const tickerData = [
+  { sym:'EUR/USD', val:'1.0842', chg:'+0.0031', up:true },
+  { sym:'GBP/USD', val:'1.2714', chg:'+0.0018', up:true },
+  { sym:'USD/JPY', val:'156.42', chg:'-0.38', up:false },
+  { sym:'DXY',    val:'104.32', chg:'-0.21', up:false },
+  { sym:'US10Y',  val:'4.38%',  chg:'+0.04', up:true },
+  { sym:'DE10Y',  val:'2.51%',  chg:'+0.02', up:true },
+  { sym:'GOLD',   val:'2,341',  chg:'+12.4', up:true },
+  { sym:'WTI',    val:'78.40',  chg:'+0.82', up:true },
+  { sym:'VIX',    val:'14.20',  chg:'-0.60', up:false },
+  { sym:'BTC/USD',val:'67,420', chg:'+1,240', up:true },
+  { sym:'USD/MXN',val:'17.12',  chg:'-0.08', up:false },
+  { sym:'S&P500', val:'5,304',  chg:'+18.2', up:true },
+];
+
+function buildTicker(containerId) {
+  const track = document.getElementById(containerId);
+  if (!track) return;
+  const items = [...tickerData, ...tickerData]; // duplicar para loop continuo
+  track.innerHTML = items.map(d => `
+    <div class="lt-item">
+      <span class="lt-sym">${d.sym}</span>
+      <span class="lt-val">${d.val}</span>
+      <span class="lt-chg ${d.up ? 'up' : 'dn'}">${d.up ? '▲' : '▼'} ${d.chg}</span>
+    </div>
+    <span class="lt-sep">|</span>
+  `).join('');
+}
+
+buildTicker('live-ticker-track');
+buildTicker('gate-ticker-track');
+
+/* ─── RELOJ TERMINAL ─── */
+function updateClock() {
+  const now = new Date();
+  const cst = new Date(now.toLocaleString('en-US', { timeZone: 'America/Chicago' }));
+  const h = String(cst.getHours()).padStart(2,'0');
+  const m = String(cst.getMinutes()).padStart(2,'0');
+  const s = String(cst.getSeconds()).padStart(2,'0');
+  const el = document.getElementById('terminal-clock');
+  if (el) el.textContent = `${h}:${m}:${s} CST`;
+}
+setInterval(updateClock, 1000);
+updateClock();
+
+/* ─── COUNTDOWN AL PRÓXIMO REPORTE ─── */
+function updateCountdown() {
+  // BACKEND TODO: Reemplazar con la fecha real del próximo reporte
+  const target = new Date('2026-06-22T20:00:00-06:00'); // Domingo 20:00 CST
+  const now = new Date();
+  const diff = target - now;
+  if (diff <= 0) {
+    ['cd-days','cd-hours','cd-mins','cd-secs'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.textContent = '00';
+    });
+    return;
+  }
+  const days  = Math.floor(diff / 86400000);
+  const hours = Math.floor((diff % 86400000) / 3600000);
+  const mins  = Math.floor((diff % 3600000) / 60000);
+  const secs  = Math.floor((diff % 60000) / 1000);
+  const set = (id, val) => { const el = document.getElementById(id); if(el) el.textContent = String(val).padStart(2,'0'); };
+  set('cd-days', days); set('cd-hours', hours); set('cd-mins', mins); set('cd-secs', secs);
+}
+setInterval(updateCountdown, 1000);
+updateCountdown();
+
+/* ─── ACCESS GATE ─── */
+/*
+  BACKEND TODO: Reemplazar esta validación local con una llamada real a tu API.
+  
+  Ejemplo con fetch:
+  async function handleGateSubmit(e) {
+    e.preventDefault();
+    const res = await fetch('/api/auth/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        email: document.getElementById('gate-email').value,
+        code:  document.getElementById('gate-code').value
+      })
+    });
+    if (res.ok) {
+      const { token } = await res.json();
+      sessionStorage.setItem('rtl_token', token);
+      unlockPortal();
+    } else {
+      document.getElementById('gate-error').classList.add('show');
+    }
+  }
+*/
+
+// Código de acceso temporal (CAMBIAR ANTES DE PRODUCCIÓN)
+const TEMP_ACCESS_CODE = 'RTL2026';
+
+function handleGateSubmit(e) {
+  e.preventDefault();
+  const name  = document.getElementById('gate-name').value.trim();
+  const email = document.getElementById('gate-email').value.trim();
+  const code  = document.getElementById('gate-code').value.trim();
+  const errEl = document.getElementById('gate-error');
+
+  if (!name || !email || !code) return;
+
+  if (code.toUpperCase() === TEMP_ACCESS_CODE) {
+    // Guardar sesión básica
+    sessionStorage.setItem('rtl_access', JSON.stringify({ name, email, ts: Date.now() }));
+    unlockPortal();
+  } else {
+    errEl.classList.add('show');
+    setTimeout(() => errEl.classList.remove('show'), 4000);
+  }
+}
+
+function unlockPortal() {
+  const gate = document.getElementById('access-gate');
+  gate.classList.add('hidden');
+  // Activar scroll reveals
+  setTimeout(() => {
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  }, 300);
+}
+
+// Verificar si ya tiene sesión activa
+window.addEventListener('DOMContentLoaded', () => {
+  const session = sessionStorage.getItem('rtl_access');
+  if (session) {
+    document.getElementById('access-gate').classList.add('hidden');
+  }
+});
+
+/* ─── SCROLL REVEAL ─── */
+const observer = new IntersectionObserver((entries, obs) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('active');
+      obs.unobserve(entry.target);
+    }
+  });
+}, { rootMargin: '0px 0px -40px 0px', threshold: 0.08 });
+
+/* ─── NAV SCROLL ─── */
+const nav = document.getElementById('navbar');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 50);
+});
+
+/* ─── FILTROS DE REPORTES ─── */
+function filterReports(cat, btn) {
+  // Actualizar tabs activos
+  if (btn) {
+    document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+    btn.classList.add('active');
+  }
+  // Filtrar filas
+  document.querySelectorAll('#report-tbody .rt-row').forEach(row => {
+    const rowCat = row.getAttribute('data-cat');
+    row.style.display = (cat === 'all' || rowCat === cat) ? '' : 'none';
+  });
+}
+
+/* ─── BÚSQUEDA ─── */
+function searchReports(query) {
+  const q = query.toLowerCase();
+  document.querySelectorAll('#report-tbody .rt-row').forEach(row => {
+    const text = row.textContent.toLowerCase();
+    row.style.display = text.includes(q) ? '' : 'none';
+  });
+}
+</script>
+
+</body>
+</html>
