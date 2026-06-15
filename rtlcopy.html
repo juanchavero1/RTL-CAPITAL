@@ -454,6 +454,37 @@ footer {
       Reemplazar la función handleGateSubmit() con tu lógica real.
       ────────────────────────────────────────────────────────────────
     -->
+    // ─── SUPABASE CONFIG ───────────────────────────────────────
+const SUPABASE_URL = 'https://xvtbexwrfiwzuqtxwocr.supabase.co'; // Con comillas
+const SUPABASE_KEY = 'sb_publishable_o9VoRo2o5w4M5dLJ5wqaJQ_F8Zfd604'; // Con comillas
+
+async function loadReports() {
+  const res = await fetch(`${SUPABASE_URL}/rest/v1/reports?order=date.desc`, {
+    headers: {
+      'apikey': SUPABASE_KEY,
+      'Authorization': `Bearer ${SUPABASE_KEY}`
+    }
+  });
+  const reports = await res.json();
+  renderReports(reports);
+}
+
+async function loadFeatured() {
+  const res = await fetch(`${SUPABASE_URL}/rest/v1/reports?featured=eq.true&limit=1`, {
+    headers: {
+      'apikey': SUPABASE_KEY,
+      'Authorization': `Bearer ${SUPABASE_KEY}`
+    }
+  });
+  const [report] = await res.json();
+  renderFeatured(report);
+}
+
+// Llama estas funciones al cargar la página
+document.addEventListener('DOMContentLoaded', () => {
+  loadReports();
+  loadFeatured();
+});
     <form id="gate-form" onsubmit="handleGateSubmit(event)">
       <div class="gate-field">
         <label>Nombre Completo</label>
