@@ -732,7 +732,7 @@ async function loadReports() {
                 'apikey': SUPABASE_KEY,
                 'Authorization': `Bearer ${SUPABASE_KEY}`,
                 'Content-Type': 'application/json'
-            }
+         },
         });
 
         if (!response.ok) {
