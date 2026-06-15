@@ -14,7 +14,7 @@
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
 :root {
-  --bg-pure:       #ffffff;
+  --bg-pure:       #ffff;
   --bg-panel:      #f8fafc;
   --bg-dark:       #0f172a;
   --bg-terminal:   #080f1e;
@@ -51,9 +51,9 @@ h1,h2,h3,h4,.serif { font-family: 'Playfair Display', serif; }
 .reveal.active { opacity:1; transform:translateY(0); }
 .d1 { transition-delay:.1s; } .d2 { transition-delay:.2s; } .d3 { transition-delay:.3s; } .d4 { transition-delay:.4s; }
 
-/* ══════════════════════════════════════════
+/* ════
    ACCESS GATE
-══════════════════════════════════════════ */
+════ */
 #access-gate {
   position: fixed; inset: 0; z-index: 9999;
   background: var(--bg-terminal);
@@ -116,9 +116,9 @@ h1,h2,h3,h4,.serif { font-family: 'Playfair Display', serif; }
 .ticker-item .dn { color: var(--red); }
 @keyframes tickerScroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 
-/* ══════════════════════════════════════════
+/* ════
    NAVEGACIÓN
-══════════════════════════════════════════ */
+════ */
 nav {
   display: flex; justify-content: space-between; align-items: center;
   padding: 24px 64px; background: rgba(255,255,255,0.97);
@@ -152,9 +152,9 @@ nav.scrolled { padding: 16px 64px; }
   background: var(--accent); color: #fff; padding: 4px 10px; text-transform: uppercase;
 }
 
-/* ══════════════════════════════════════════
+/* ════
    TERMINAL HEADER
-══════════════════════════════════════════ */
+════ */
 .terminal-bar {
   background: var(--bg-terminal); color: #94a3b8;
   padding: 10px 64px; margin-top: 73px;
@@ -174,9 +174,9 @@ nav.scrolled { padding: 16px 64px; }
 .tb-right .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); animation: pulse 2s infinite; }
 @keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:0.4;} }
 
-/* ══════════════════════════════════════════
+/* ════
    HERO RESEARCH
-══════════════════════════════════════════ */
+════ */
 .research-hero {
   background: var(--bg-dark); padding: 80px 64px 60px;
   border-bottom: 1px solid rgba(255,255,255,0.06);
@@ -201,9 +201,9 @@ nav.scrolled { padding: 16px 64px; }
 .rh-stat .s-num span { font-size: 14px; color: var(--accent); }
 .rh-stat .s-lbl { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: #475569; letter-spacing: 0.15em; text-transform: uppercase; }
 
-/* ══════════════════════════════════════════
+/* ════
    FILTROS / TABS
-══════════════════════════════════════════ */
+════ */
 .filter-bar {
   background: var(--bg-panel); border-bottom: 1px solid var(--border-light);
   padding: 0 64px; position: sticky; top: 73px; z-index: 900;
@@ -227,9 +227,9 @@ nav.scrolled { padding: 16px 64px; }
 .search-box input::placeholder { color: var(--text-muted); }
 .search-box svg { color: var(--text-muted); flex-shrink: 0; }
 
-/* ══════════════════════════════════════════
+/* ════
    MAIN LAYOUT
-══════════════════════════════════════════ */
+════ */
 .portal-body { max-width: 1400px; margin: 0 auto; padding: 48px 64px 120px; display: grid; grid-template-columns: 1fr 340px; gap: 48px; }
 
 /* ─── FEATURED REPORT ─── */
@@ -316,9 +316,9 @@ nav.scrolled { padding: 16px 64px; }
 .pg-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
 .pg-dots { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--text-muted); padding: 0 8px; }
 
-/* ══════════════════════════════════════════
+/* ════
    SIDEBAR
-══════════════════════════════════════════ */
+════ */
 .sidebar { display: flex; flex-direction: column; gap: 32px; }
 
 .widget { border: 1px solid var(--border-light); background: var(--bg-pure); }
@@ -361,9 +361,9 @@ nav.scrolled { padding: 16px 64px; }
 .dw-icon { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: var(--amber); letter-spacing: 0.15em; margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
 .dw-text { font-size: 11px; color: var(--text-muted); line-height: 1.6; }
 
-/* ══════════════════════════════════════════
+/* ════
    LIVE TICKER
-══════════════════════════════════════════ */
+════ */
 .live-ticker {
   position: fixed; bottom: 0; left: 0; right: 0; z-index: 800;
   background: var(--bg-dark); border-top: 1px solid rgba(255,255,255,0.07);
@@ -377,9 +377,9 @@ nav.scrolled { padding: 16px 64px; }
 .lt-chg.dn { color: var(--red); }
 .lt-sep { color: #1e293b; }
 
-/* ══════════════════════════════════════════
+/* ════
    FOOTER
-══════════════════════════════════════════ */
+════ */
 footer {
   background: var(--text-main); color: #94a3b8;
   padding: 60px 64px 40px; margin-bottom: 36px;
@@ -393,9 +393,9 @@ footer {
 .f-links a:hover { color: #fff; }
 .footer-bottom { max-width: 1400px; margin: 0 auto; display: flex; justify-content: space-between; font-size: 10px; font-family: 'JetBrains Mono', monospace; }
 
-/* ══════════════════════════════════════════
+/* ════
    RESPONSIVE
-══════════════════════════════════════════ */
+════ */
 @media (max-width: 1200px) {
   .portal-body { grid-template-columns: 1fr; }
   .sidebar { display: grid; grid-template-columns: repeat(2,1fr); }
@@ -422,9 +422,9 @@ footer {
 </head>
 <body>
 
-<!-- ══════════════════════════════════════════
+<!-- ════
      ACCESS GATE
-══════════════════════════════════════════ -->
+════ -->
 <div id="access-gate">
   <div class="gate-panel">
     <div class="gate-logo">
@@ -446,7 +446,7 @@ footer {
       </div>
       <div class="gate-field">
         <label>Código de Acceso</label>
-        <input type="password" id="gate-code" required placeholder="••••••••">
+        <input type="password" id="gate-code" required placeholder="••••">
       </div>
       <button type="submit" class="gate-btn">Verificar Credenciales →</button>
       <div class="gate-error" id="gate-error">// ERROR: Credenciales no reconocidas. Contacte research@rtlcapital.com</div>
@@ -462,9 +462,9 @@ footer {
   </div>
 </div>
 
-<!-- ══════════════════════════════════════════
+<!-- ════
      NAVEGACIÓN
-══════════════════════════════════════════ -->
+════ -->
 <nav id="navbar">
   <a href="index.html" class="logo-container">
     <h1 class="serif">RTL Capital</h1>
@@ -479,9 +479,9 @@ footer {
   <div class="nav-badge mono">LIVE</div>
 </nav>
 
-<!-- ══════════════════════════════════════════
+<!-- ════
      TERMINAL BAR
-══════════════════════════════════════════ -->
+════ -->
 <div class="terminal-bar">
   <div class="tb-left">
     <div class="tb-item"><span class="lbl">EUR/USD</span><span class="val up">1.0842 ▲</span></div>
@@ -498,9 +498,9 @@ footer {
   </div>
 </div>
 
-<!-- ══════════════════════════════════════════
+<!-- ════
      HERO RESEARCH
-══════════════════════════════════════════ -->
+════ -->
 <section class="research-hero">
   <div class="rh-inner">
     <div class="rh-left reveal">
@@ -525,9 +525,9 @@ footer {
   </div>
 </section>
 
-<!-- ══════════════════════════════════════════
+<!-- ════
      FILTER BAR
-══════════════════════════════════════════ -->
+════ -->
 <div class="filter-bar">
   <div class="filter-inner">
     <div class="filter-tabs">
@@ -546,9 +546,9 @@ footer {
   </div>
 </div>
 
-<!-- ══════════════════════════════════════════
+<!-- ════
      PORTAL BODY
-══════════════════════════════════════════ -->
+════ -->
 <div class="portal-body">
 
   <!-- ─── COLUMNA PRINCIPAL ─── -->
@@ -668,9 +668,9 @@ footer {
   </aside>
 </div>
 
-<!-- ══════════════════════════════════════════
+<!-- ════
      FOOTER
-══════════════════════════════════════════ -->
+════ -->
 <footer>
   <div class="footer-inner">
     <div class="f-brand">
@@ -708,31 +708,29 @@ footer {
   <div class="lt-track" id="live-ticker-track"></div>
 </div>
 
-<!-- ══════════════════════════════════════════
+<!-- ════
      JAVASCRIPT
-══════════════════════════════════════════ -->
+════ -->
 <script>
-/* ══════════════════════════════════════════
+/* ════
    SUPABASE CONFIG
-══════════════════════════════════════════ */
-// CONFIGURACIÓN DE SUPABASE
+════ */
 const SUPABASE_URL = 'https://xvtbexwrfiwzuqtxwocr.supabase.co';
-const SUPABASE_KEY = 'sb_publishable_o9VoRo2o5w4M5dLJ5wqaJQ_F8Zfd604'; // Asegúrate que esta sea la que copiaste de "Publishable key"
+const SUPABASE_KEY = 'sb_publishable_o9VoRo2o5w4M5dLJ5wqaJQ_F8Zfd604';
 
-// Función para cargar reportes
+const HEADERS = {
+    'apikey': SUPABASE_KEY,
+    'Authorization': `Bearer ${SUPABASE_KEY}`,
+    'Content-Type': 'application/json'
+};
+
+// Función principal para cargar reportes
 async function loadReports() {
+    console.log("Iniciando conexión con Supabase...");
     try {
-        console.log("Conectando a Supabase...");
-        
-        // Limpiamos la URL para evitar errores de doble diagonal
-        const baseUrl = SUPABASE_URL.replace(/\/$/, "");
-        const response = await fetch(`${baseUrl}/rest/v1/reports?select=*&order=date.desc`, {
+        const response = await fetch(`${SUPABASE_URL}/rest/v1/reports?select=*&order=date.desc`, {
             method: 'GET',
-            headers: {
-                'apikey': SUPABASE_KEY,
-                'Authorization': `Bearer ${SUPABASE_KEY}`,
-                'Content-Type': 'application/json'
-         },
+            headers: HEADERS
         });
 
         if (!response.ok) {
@@ -745,61 +743,38 @@ async function loadReports() {
         console.log("Datos recibidos:", data);
         
         allReports = data;
-        renderFeatured(data.find(r => r.featured) || data[0]);
+        
+        // Renderizado
+        if (data.length > 0) {
+            const featured = data.find(r => r.featured === true) || data[0];
+            renderFeatured(featured);
+        }
+        
         renderReports(data);
         updateCounts(data);
+        updateStatTotal(data.length);
 
     } catch (error) {
         console.error("Error crítico de conexión:", error);
-        document.getElementById('reports-body').innerHTML = `
+        document.getElementById('report-tbody').innerHTML = `
             <tr>
-                <td colspan="5" class="text-center py-8 text-red-500 font-mono">
-                    // ERROR AL CONECTAR CON SUPABASE - Revisa la consola (F12)
+                <td colspan="6" class="rt-empty" style="color: var(--red);">
+                    // ERROR AL CONECTAR CON SUPABASE — Ver consola (F12)
                 </td>
             </tr>
         `;
     }
 }
-/* ══════════════════════════════════════════
+
+/* ════
    ESTADO GLOBAL
-══════════════════════════════════════════ */
+════ */
 let allReports = [];
 let currentFilter = 'all';
 
-/* ══════════════════════════════════════════
-   CARGAR REPORTES DESDE SUPABASE
-══════════════════════════════════════════ */
-async function loadReports() {
-  try {
-    const res = await fetch(
-      `${SUPABASE_URL}/rest/v1/reports?select=*&order=date.desc`,
-      { headers: HEADERS }
-    );
-
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-
-    allReports = await res.json();
-
-    renderReports(allReports);
-    updateCounts(allReports);
-    updateStatTotal(allReports.length);
-
-    // Cargar featured por separado
-    const featured = allReports.find(r => r.featured === true);
-    if (featured) renderFeatured(featured);
-
-  } catch (err) {
-    console.error('Supabase error:', err);
-    document.getElementById('report-tbody').innerHTML = `
-      <tr><td colspan="6" class="rt-empty">
-        // ERROR AL CONECTAR CON SUPABASE — Verifica tu URL y API Key
-      </td></tr>`;
-  }
-}
-
-/* ══════════════════════════════════════════
+/* ════
    RENDER: FEATURED REPORT
-══════════════════════════════════════════ */
+════ */
 function renderFeatured(report) {
   if (!report) return;
 
@@ -833,9 +808,9 @@ function renderFeatured(report) {
   }
 }
 
-/* ══════════════════════════════════════════
+/* ════
    RENDER: TABLA DE REPORTES
-══════════════════════════════════════════ */
+════ */
 function renderReports(reports) {
   const tbody = document.getElementById('report-tbody');
 
@@ -883,9 +858,9 @@ function renderReports(reports) {
   }).join('');
 }
 
-/* ══════════════════════════════════════════
+/* ════
    ACTUALIZAR CONTADORES
-══════════════════════════════════════════ */
+════ */
 function updateCounts(reports) {
   const cats = ['fx', 'rates', 'commodities', 'macro'];
   const total = reports.length;
@@ -908,9 +883,9 @@ function updateStatTotal(n) {
   if (el) el.innerHTML = `${n}<span>+</span>`;
 }
 
-/* ══════════════════════════════════════════
+/* ════
    FILTROS
-══════════════════════════════════════════ */
+════ */
 function filterReports(cat, btn) {
   currentFilter = cat;
 
@@ -926,9 +901,9 @@ function filterReports(cat, btn) {
   renderReports(filtered);
 }
 
-/* ══════════════════════════════════════════
+/* ════
    BÚSQUEDA
-══════════════════════════════════════════ */
+════ */
 function searchReports(query) {
   const q = query.toLowerCase();
   const base = currentFilter === 'all' ? allReports : allReports.filter(r => r.category === currentFilter);
@@ -942,9 +917,9 @@ function searchReports(query) {
   renderReports(filtered);
 }
 
-/* ══════════════════════════════════════════
+/* ════
    TICKER DATA (ESTÁTICO — reemplazar con API)
-══════════════════════════════════════════ */
+════ */
 const tickerData = [
   { sym:'EUR/USD', val:'1.0842', chg:'+0.0031', up:true },
   { sym:'GBP/USD', val:'1.2714', chg:'+0.0018', up:true },
@@ -977,9 +952,9 @@ function buildTicker(containerId) {
 buildTicker('live-ticker-track');
 buildTicker('gate-ticker-track');
 
-/* ══════════════════════════════════════════
+/* ════
    RELOJ TERMINAL
-══════════════════════════════════════════ */
+════ */
 function updateClock() {
   const now = new Date();
   const cst = new Date(now.toLocaleString('en-US', { timeZone: 'America/Chicago' }));
@@ -992,9 +967,9 @@ function updateClock() {
 setInterval(updateClock, 1000);
 updateClock();
 
-/* ══════════════════════════════════════════
+/* ════
    COUNTDOWN
-══════════════════════════════════════════ */
+════ */
 function updateCountdown() {
   const target = new Date('2026-06-22T20:00:00-06:00');
   const now = new Date();
@@ -1006,9 +981,9 @@ function updateCountdown() {
     });
     return;
   }
-  const days  = Math.floor(diff / 86400000);
-  const hours = Math.floor((diff % 86400000) / 3600000);
-  const mins  = Math.floor((diff % 3600000) / 60000);
+  const days  = Math.floor(diff / 8640000);
+  const hours = Math.floor((diff % 8640000) / 360000);
+  const mins  = Math.floor((diff % 360000) / 60000);
   const secs  = Math.floor((diff % 60000) / 1000);
   const set = (id, val) => { const el = document.getElementById(id); if(el) el.textContent = String(val).padStart(2,'0'); };
   set('cd-days', days); set('cd-hours', hours); set('cd-mins', mins); set('cd-secs', secs);
@@ -1016,9 +991,9 @@ function updateCountdown() {
 setInterval(updateCountdown, 1000);
 updateCountdown();
 
-/* ══════════════════════════════════════════
+/* ════
    ACCESS GATE
-══════════════════════════════════════════ */
+════ */
 const TEMP_ACCESS_CODE = 'RTL2026';
 
 function handleGateSubmit(e) {
@@ -1048,9 +1023,9 @@ function unlockPortal() {
   loadReports();
 }
 
-/* ══════════════════════════════════════════
+/* ════
    SCROLL REVEAL
-══════════════════════════════════════════ */
+════ */
 const observer = new IntersectionObserver((entries, obs) => {
   entries.forEach(entry => {
     if (entry.isIntersecting) {
@@ -1060,17 +1035,17 @@ const observer = new IntersectionObserver((entries, obs) => {
   });
 }, { rootMargin: '0px 0px -40px 0px', threshold: 0.08 });
 
-/* ══════════════════════════════════════════
+/* ════
    NAV SCROLL
-══════════════════════════════════════════ */
+════ */
 const navEl = document.getElementById('navbar');
 window.addEventListener('scroll', () => {
   navEl.classList.toggle('scrolled', window.scrollY > 50);
 });
 
-/* ══════════════════════════════════════════
+/* ════
    INIT
-══════════════════════════════════════════ */
+════ */
 window.addEventListener('DOMContentLoaded', () => {
   const session = sessionStorage.getItem('rtl_access');
   if (session) {
